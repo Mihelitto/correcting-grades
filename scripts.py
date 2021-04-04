@@ -49,6 +49,8 @@ def get_child(name):
 
 def fix_marks(name):
     schoolkid = get_child(name)
+    if not schoolkid:
+        return
     marks = Mark.objects.filter(schoolkid=schoolkid, points__lt=4)
     for mark in marks:
         mark.points = 5
@@ -58,6 +60,8 @@ def fix_marks(name):
 
 def remove_chastisements(name):
     schoolkid = get_child(name)
+    if not schoolkid:
+        return
     chastisements = Chastisement.objects.filter(schoolkid=schoolkid)
     chastisements.delete()
     print("Замечания удалены.")
@@ -85,4 +89,3 @@ def create_commendation(name, lesson_title):
         created=lesson.date
     )
     print("Похвала добавлена.")
-
