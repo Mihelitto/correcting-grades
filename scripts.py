@@ -36,7 +36,7 @@ commendations = (
 )
 
 
-def get_child(name):
+def get_schoolkid(name):
     try:
         return Schoolkid.objects.get(full_name__contains=name)
     except Schoolkid.DoesNotExist:
@@ -48,7 +48,7 @@ def get_child(name):
 
 
 def fix_marks(name):
-    schoolkid = get_child(name)
+    schoolkid = get_schoolkid(name)
     if not schoolkid:
         return
     marks = Mark.objects.filter(schoolkid=schoolkid, points__lt=4)
@@ -59,7 +59,7 @@ def fix_marks(name):
 
 
 def remove_chastisements(name):
-    schoolkid = get_child(name)
+    schoolkid = get_schoolkid(name)
     if not schoolkid:
         return
     chastisements = Chastisement.objects.filter(schoolkid=schoolkid)
@@ -68,13 +68,13 @@ def remove_chastisements(name):
 
 
 def create_commendation(name, lesson_title):
-    child = get_child(name)
-    if not child:
+    schoolkid = get_schoolkid(name)
+    if not schoolkid:
         return
 
     lesson = Lesson.objects.filter(
-        year_of_study=child.year_of_study,
-        group_letter=child.group_letter,
+        year_of_study=schoolkid.year_of_study,
+        group_letter=schoolkid.group_letter,
         subject__title=lesson_title
     ).order_by("-date").first()
     if not lesson:
@@ -83,7 +83,7 @@ def create_commendation(name, lesson_title):
 
     Commendation.objects.create(
         text=random.choice(commendations),
-        schoolkid=child,
+        schoolkid=schoolkid,
         subject=lesson.subject,
         teacher=lesson.teacher,
         created=lesson.date
