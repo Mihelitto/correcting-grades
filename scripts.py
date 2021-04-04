@@ -39,10 +39,10 @@ commendations = (
 def get_child(name):
     try:
         return Schoolkid.objects.get(full_name__contains=name)
-    except ObjectDoesNotExist:
+    except Schoolkid.DoesNotExist:
         print("Ошибка! Такого ученика нет.")
         return
-    except MultipleObjectsReturned:
+    except Schoolkid.MultipleObjectsReturned:
         print("Ошибка! Укажите полное имя, так как под указанное подходит сразу несколько учеников.")
         return
 
